@@ -1,10 +1,14 @@
 # zipic
 A PNG/JPEG image compression tool powered by tinypng.com
 
-Usage:   
-`./zipic --input=<filepath> --output=<filepath>`   
+## First thing
+Please visit https://tinypng.com/developers to get a API Key, and replace the key which in zipic.py, the first 500 compression each month are free.
+
+## Usage:   
+
+`./zipic.py --input=<filepath> --output=<filepath>`   
 or   
-`./zipic <filepath>`   
+`./zipic.py <filepath>`   
 
 All arguments:
 
