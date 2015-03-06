@@ -40,7 +40,7 @@ def compress(input, output, verbose):
                     .format(outputSize, reduceSize, 100 - ratio))
             print('output path:\t{0} {1}'.format('overwrite' if input == output else '', output))
         else:
-            print("Compression ratio: {}%".format(ratio))
+            print("Reduced {0} bytes({1}%)".format(reduceSize, ratio))
 
         # Compression was successful, retrieve output from Location header.
         result = urlopen(response.getheader("Location"), cafile = cafile).read()
