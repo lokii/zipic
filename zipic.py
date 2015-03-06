@@ -42,8 +42,9 @@ def compress(input, output, verbose):
             print("Reduced {0} bytes({1}%)".format(reduceSize, ratio))
 
         # Compression was successful, retrieve output from Location header.
-        result = urlopen(response.getheader("Location"), cafile = cafile).read()
-        open(output, "wb").write(result)
+        if reduceSize > 0:
+            result = urlopen(response.getheader("Location"), cafile = cafile).read()
+            open(output, "wb").write(result)
         return reduceSize
     else:
         # Something went wrong! You can parse the JSON body for details.
@@ -106,7 +107,7 @@ if __name__ == '__main__':
     else:
         for input in inputFiles:
             if os.path.isfile(input):
-                if len(outputFile) == 0:
+                if len(outputFile) == 0 or len(inputFiles) > 1:
                     outputFile = input if not rename else getNewPath(input)
                 print('Try to compress file: {}'.format(input))
                 compress(input, outputFile, verbose)
