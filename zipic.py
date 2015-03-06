@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import os
 import sys
@@ -57,7 +57,8 @@ def usage():
             ''' Please keep network available when use this tool. Usage:
             ./zipic --input=<filepath> --output=<filepath>
             or
-            ./zipic <filepath>
+            ./zipic [args] <filepath>
+            All args:
             -h, --help: Show help tips
             -i, --input=<path>: Set input file path, can't be a directory.
             -o, --ouput=<path>: Set output file path, can't be a directory, if not set then overwrite the input file.
@@ -81,19 +82,19 @@ if __name__ == '__main__':
     inputFile = ''
     outputFile = ''
 
-    if len(opts) > 0:
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                usage()
-                sys.exit()
-            elif opt in ('-v', '--verbose'):
-                verbose = True
-            elif opt in ('-r', '--rename'):
-                rename = True
-            elif opt in ('-i', '--input'):
-                inputFile = arg
-            elif opt in ('-o', '--output'):
-                outputFile = arg
+    #print(opts, args)
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            usage()
+            sys.exit()
+        elif opt in ('-v', '--verbose'):
+            verbose = True
+        elif opt in ('-r', '--rename'):
+            rename = True
+        elif opt in ('-i', '--input'):
+            inputFile = arg
+        elif opt in ('-o', '--output'):
+            outputFile = arg
 
     if len(inputFile) == 0 and len(args) > 0:
         inputFile = args[0]
