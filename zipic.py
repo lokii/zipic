@@ -24,7 +24,6 @@ def compress(input, output, verbose):
     auth = b64encode(bytes("api:" + key, "ascii")).decode("ascii")
     request.add_header("Authorization", "Basic %s" % auth)
 
-    print('Try to compress file: {}'.format(input))
     response = urlopen(request, cafile = cafile)
     if response.status == 201:
         info = json.loads(response.read().decode('ascii'))
@@ -55,9 +54,9 @@ def compress(input, output, verbose):
 def usage():
     print(
             ''' Please keep network available when use this tool. Usage:
-            ./zipic --input=<filepath> --output=<filepath>
+            ./zipic [args] --input=<filepath> --output=<filepath>
             or
-            ./zipic [args] <filepath>
+            ./zipic [args must before file path] <filepath>
             All args:
             -h, --help: Show help tips
             -i, --input=<path>: Set input file path, can't be a directory.
@@ -79,7 +78,7 @@ if __name__ == '__main__':
 
     verbose = False
     rename = False
-    inputFile = ''
+    inputFiles = ''
     outputFile = ''
 
     #print(opts, args)
@@ -92,19 +91,25 @@ if __name__ == '__main__':
         elif opt in ('-r', '--rename'):
             rename = True
         elif opt in ('-i', '--input'):
-            inputFile = arg
+            inputFiles = (arg, )
         elif opt in ('-o', '--output'):
             outputFile = arg
 
-    if len(inputFile) == 0 and len(args) > 0:
-        inputFile = args[0]
+    if len(inputFiles) == 0 and len(args) > 0:
+        if len(outputFile) > 0:
+            inputFiles = (args[0], )
+        else:
+            inputFiles = args
 
-    if len(inputFile) == 0:
+    if len(inputFiles) == 0:
         print('Must set input file path!')
-    elif not os.path.isfile(inputFile):
-        print('Input file is not exists!')
     else:
-        if len(outputFile) == 0:
-            outputFile = inputFile if not rename else getNewPath(inputFile)
-        compress(inputFile, outputFile, verbose)
+        for input in inputFiles:
+            if os.path.isfile(input):
+                if len(outputFile) == 0:
+                    outputFile = input if not rename else getNewPath(input)
+                print('Try to compress file: {}'.format(input))
+                compress(input, outputFile, verbose)
+            else:
+                print('Input file is not exists!')
 
